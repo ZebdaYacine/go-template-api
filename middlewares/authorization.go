@@ -37,6 +37,6 @@ func IsAuthorizedToNewProduct() gin.HandlerFunc {
 	return isAdminOrSuperUser()
 }
 
-func IsAuthorizedToNewUser() gin.HandlerFunc {
+func IsAuthorizedToDeleteAccount() gin.HandlerFunc {
 	return isAdminOrSuperUser()
 }

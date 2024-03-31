@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"go-template-api/common"
 	"go-template-api/db"
 	"go-template-api/model"
@@ -9,10 +8,10 @@ import (
 )
 
 func CreateNewUser(user model.User_Table) common.SqlQueryStatus {
-	if isEmailExist(user.Email) {
+	if IsEmailExist(user.Email) {
 		return common.SqlQueryStatus{Message: "Email is already used", Code: 0, Err: nil}
 	}
-	if isPhoneExist(user.Phone) {
+	if IsPhoneExist(user.Phone) {
 		return common.SqlQueryStatus{Message: "Phone is already used", Code: 0, Err: nil}
 	}
 	result := db.Conn.Create(&user)
@@ -25,30 +24,29 @@ func CreateNewUser(user model.User_Table) common.SqlQueryStatus {
 }
 
 func CheckCredentials(user model.User_Table) common.SqlQueryStatus {
-	if !isPhoneExist(user.Phone) {
+	if !IsPhoneExist(user.Phone) {
 		return common.SqlQueryStatus{Message: "Phone not found", Code: 0, Err: nil}
 	}
-	if !isPwdCorrect(user.Phone, user.Password) {
+	if !IsPwdCorrect(user.Phone, user.Password) {
 		return common.SqlQueryStatus{Message: "Password incorrect", Code: 0, Err: nil}
 	}
 	return common.SqlQueryStatus{Message: "Jwt Processing...!", Code: 1, Err: nil}
 }
 
-func isEmailExist(email string) bool {
-	var emails []string
-	db.Conn.Where("email=?", email).Find(&emails)
-	return len(emails) != 0
+func IsEmailExist(email string) bool {
+	var mail model.User_Table
+	db.Conn.Find(&mail, "email=?", email)
+	return mail.ID != 0
 }
 
-func isPhoneExist(phone string) bool {
-	var phones string
-	db.Conn.Where("phone=?", phone).Find(phones)
-	fmt.Println(phones)
+func IsPhoneExist(phone string) bool {
+	var phones []model.User_Table
+	db.Conn.Find(&phones, "phone=?", phone)
 	return len(phones) != 0
 }
 
-func isPwdCorrect(phone, pwd string) bool {
-	var pwds []string
+func IsPwdCorrect(phone, pwd string) bool {
+	var pwds []model.User_Table
 	db.Conn.Where("phone = ? AND password = ?", phone, pwd).Find(&pwds)
 	return len(pwds) != 0
 }

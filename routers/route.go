@@ -28,26 +28,32 @@ func GetRouting(server *gin.Engine) {
 			POST(
 				"register",
 				middlewares.EnsureNotLoggedIn(),
-				middlewares.IsAuthorizedToNewUser(),
+				handlers.Register,
+			)
+		userRoute.
+			POST(
+				"deleteAccount",
+				middlewares.EnsureLoggedIn(),
+				middlewares.IsAuthorizedToDeleteAccount(),
 				handlers.Register,
 			)
 	}
-	productRouter := server.Group("/product")
-	{
-		productRouter.
-			GET(
-				"productList",
-				middlewares.EnsureLoggedIn(),
-				middlewares.IsAuthorizedToGetProductsList(),
-				handlers.ProductList,
-			)
-		productRouter.
-			POST(
-				"addProduct",
-				middlewares.EnsureLoggedIn(),
-				middlewares.IsAuthorizedToNewProduct(),
-				handlers.NewProduct,
-			)
-	}
+	// productRouter := server.Group("/product")
+	// {
+	// 	productRouter.
+	// 		GET(
+	// 			"productList",
+	// 			middlewares.EnsureLoggedIn(),
+	// 			middlewares.IsAuthorizedToGetProductsList(),
+	// 			handlers.ProductList,
+	// 		)
+	// 	productRouter.
+	// 		POST(
+	// 			"addProduct",
+	// 			middlewares.EnsureLoggedIn(),
+	// 			middlewares.IsAuthorizedToNewProduct(),
+	// 			handlers.NewProduct,
+	// 		)
+	// }
 
 }
