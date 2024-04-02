@@ -1,14 +1,14 @@
-package server
+package servers
 
 import (
+	router "go-template-api/api/routers"
 	"go-template-api/config"
-	router "go-template-api/routers"
 	"log"
 
 	"github.com/gin-gonic/gin"
 )
 
-func InitGinServer() {
+func InitServer() {
 	//gin.SetMode(gin.DebugMode)
 
 	server := gin.New()

@@ -2,8 +2,9 @@ package controller
 
 import (
 	"go-template-api/common"
-	"go-template-api/db"
-	"go-template-api/model"
+	"go-template-api/internal/db"
+	"go-template-api/internal/model"
+
 	"go-template-api/utils"
 )
 
@@ -31,7 +32,7 @@ func UpdateCode(user model.User_Table) error {
 	return nil
 }
 
-func CheckCredentials(user model.User_Table) common.SqlQueryStatus {
+func CheckCredentials(user *model.User_Table) common.SqlQueryStatus {
 	if user.Email == "" {
 		if !IsPhoneExist(user.Phone) {
 			return common.SqlQueryStatus{Message: "Phone not found", Code: 0, Err: nil}

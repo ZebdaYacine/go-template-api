@@ -1,6 +1,6 @@
 package common
 
-import "go-template-api/model"
+import "go-template-api/internal/model"
 
 type SqlQueryStatus struct {
 	Message string

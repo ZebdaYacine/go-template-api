@@ -1,8 +1,8 @@
 package router
 
 import (
-	"go-template-api/handlers"
-	"go-template-api/middlewares"
+	"go-template-api/api/handlers"
+	"go-template-api/api/middlewares"
 	"log"
 
 	"github.com/gin-gonic/gin"

@@ -1,18 +1,16 @@
 package main
 
 import (
-	"go-template-api/db"
-	server "go-template-api/servers"
-
 	//server "go-template-api/servers"
+	ginServer "go-template-api/cmd/servers"
+	"go-template-api/internal/db"
 	"log"
-	//server "go-template-api/servers"
 )
 
 func luanch() {
 	log.Println("Initializing Server")
 	go db.ConnectDb()
-	server.InitGinServer()
+	ginServer.InitServer()
 }
 
 func main() {

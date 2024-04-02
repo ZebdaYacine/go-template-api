@@ -1,9 +1,9 @@
 package test
 
 import (
-	"go-template-api/controller"
-	"go-template-api/db"
-	"go-template-api/model"
+	"go-template-api/internal/controller"
+	"go-template-api/internal/db"
+	"go-template-api/internal/model"
 	"log"
 	"testing"
 )

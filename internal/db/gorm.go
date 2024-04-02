@@ -1,7 +1,7 @@
 package db
 
 import (
-	"go-template-api/model"
+	"go-template-api/internal/model"
 	"log"
 
 	"gorm.io/driver/sqlite"

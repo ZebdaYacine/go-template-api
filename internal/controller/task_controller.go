@@ -2,8 +2,9 @@ package controller
 
 import (
 	"go-template-api/common"
-	"go-template-api/db"
-	"go-template-api/model"
+	"go-template-api/internal/db"
+	"go-template-api/internal/model"
+
 	"log"
 )
 

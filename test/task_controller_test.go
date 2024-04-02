@@ -2,9 +2,10 @@ package test
 
 import (
 	"fmt"
-	"go-template-api/controller"
-	"go-template-api/db"
-	"go-template-api/model"
+	"go-template-api/internal/controller"
+	"go-template-api/internal/db"
+	"go-template-api/internal/model"
+
 	"testing"
 	"time"
 )
@@ -26,5 +27,3 @@ func TestIsTaskExist(t *testing.T) {
 	got := controller.IsTaskExist("d5zADF")
 	fmt.Printf("createTask() = %v, want %v", got, true)
 }
-
-

@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	"go-template-api/utils"
+	"go-template-api/api/security"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,7 +11,7 @@ func EnsureLoggedIn() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("Authorization")
 		token = token[len("Bearer "):]
-		err := utils.VerifyToken(token)
+		err := security.VerifyToken(token)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Wrong Token"})
 			return
