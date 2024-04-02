@@ -11,7 +11,7 @@ import (
 
 func luanch() {
 	log.Println("Initializing Server")
-	db.ConnectDb()
+	go db.ConnectDb()
 	server.InitGinServer()
 }
 

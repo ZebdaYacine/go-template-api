@@ -5,10 +5,9 @@ import (
 	"go-template-api/db"
 	"go-template-api/model"
 	"go-template-api/utils"
-	"log"
 )
 
-func CreateNewUser(user model.User_Table) common.SqlQueryStatus {
+func CreateNewUser(user *model.User_Table) common.SqlQueryStatus {
 	if IsEmailExist(user.Email) {
 		return common.SqlQueryStatus{Message: "Email is already used", Code: 0, Err: nil}
 	}
@@ -17,20 +16,38 @@ func CreateNewUser(user model.User_Table) common.SqlQueryStatus {
 	}
 	result := db.Conn.Create(&user)
 	if result.Error != nil {
-		log.Println("Error creating user:", result.Error)
 		return common.SqlQueryStatus{Message: "cannot create user", Code: 0, Err: result.Error}
 	}
-	UpdateCode(user)
+	user.Code = utils.GenerateNewCode(user.ID)
+	UpdateCode(*user)
 	return common.SqlQueryStatus{Message: "User created successfully", Code: 1, Err: nil}
 }
 
+func UpdateCode(user model.User_Table) error {
+	result := db.Conn.Model(&user).Update("code", user.Code)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
 func CheckCredentials(user model.User_Table) common.SqlQueryStatus {
-	if !IsPhoneExist(user.Phone) {
-		return common.SqlQueryStatus{Message: "Phone not found", Code: 0, Err: nil}
+	if user.Email == "" {
+		if !IsPhoneExist(user.Phone) {
+			return common.SqlQueryStatus{Message: "Phone not found", Code: 0, Err: nil}
+		}
+		if !IsPwdCorrect("phone = ? AND password = ?", user.Phone, user.Password) {
+			return common.SqlQueryStatus{Message: "Password incorrect", Code: 0, Err: nil}
+		}
+	} else if user.Phone == "" {
+		if !IsEmailExist(user.Email) {
+			return common.SqlQueryStatus{Message: "Email not found", Code: 0, Err: nil}
+		}
+		if !IsPwdCorrect("email = ? AND password = ?", user.Email, user.Password) {
+			return common.SqlQueryStatus{Message: "Password incorrect", Code: 0, Err: nil}
+		}
 	}
-	if !IsPwdCorrect(user.Phone, user.Password) {
-		return common.SqlQueryStatus{Message: "Password incorrect", Code: 0, Err: nil}
-	}
+
 	return common.SqlQueryStatus{Message: "Jwt Processing...!", Code: 1, Err: nil}
 }
 
@@ -46,17 +63,8 @@ func IsPhoneExist(phne string) bool {
 	return user.ID != 0
 }
 
-func IsPwdCorrect(phone, pwd string) bool {
+func IsPwdCorrect(condition, att, pwd string) bool {
 	var user model.User_Table
-	db.Conn.Where("phone = ? AND password = ?", phone, pwd).Find(&user)
+	db.Conn.Where(condition, att, pwd).Find(&user)
 	return user.ID != 0
-}
-
-func UpdateCode(user model.User_Table) error {
-	result := db.Conn.Model(&user).Update("code", utils.GenerateNewCode(user.ID))
-	if result.Error != nil {
-		log.Println("Error updating  code user:", result.Error)
-		return result.Error
-	}
-	return nil
 }

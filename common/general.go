@@ -15,7 +15,7 @@ type Claims struct {
 
 func GenetatJwt(user model.User_Table) (string, error) {
 	secretKey := []byte(config.GetSecrtKey())
-	expirationTime := time.Now().Add(30 * time.Minute)
+	expirationTime := time.Now().Add(1 * time.Minute)
 	claims := &Claims{
 		Id: user.ID,
 		RegisteredClaims: jwt.RegisteredClaims{

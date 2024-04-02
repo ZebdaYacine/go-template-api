@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	"log"
+	"go-template-api/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,9 +9,10 @@ import (
 
 func EnsureLoggedIn() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		authHeader := c.GetHeader("Authorization")
-		log.Printf("Authorization : %s", authHeader)
-		if authHeader != "Basic emVkOjU0NTY0Zw==" {
+		token := c.GetHeader("Authorization")
+		token = token[len("Bearer "):]
+		err := utils.VerifyToken(token)
+		if err != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Wrong Token"})
 			return
 		}
