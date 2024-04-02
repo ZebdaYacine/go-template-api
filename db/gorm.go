@@ -18,4 +18,5 @@ func ConnectDb() {
 	}
 	log.Println("----------Connect database----------")
 	Conn.AutoMigrate(&model.User_Table{})
+	Conn.AutoMigrate(&model.Task_Table{})
 }
